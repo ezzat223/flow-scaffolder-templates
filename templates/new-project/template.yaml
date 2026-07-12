@@ -52,12 +52,22 @@ spec:
       input:
         amount: 60
 
-    - id: register
-      name: Register in Catalog
-      action: catalog:register
+#    - id: register
+#      name: Register in Catalog
+#      action: catalog:register
+#      input:
+#        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/main
+#        catalogInfoPath: /catalog-info.yaml
+
+    - id: add-catalog-info
+      name: Add catalog-info.yaml
+      action: publish:github:pull-request
       input:
-        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/main
-        catalogInfoPath: /catalog-info.yaml
+        repoUrl: github.com?repo=${{ parameters.project_name }}&owner=Finaira1
+        branchName: add-catalog-info
+        title: "chore: add catalog-info.yaml"
+        description: "Adds Backstage catalog registration file"
+        sourcePath: catalog-template
 
   output:
     links:
