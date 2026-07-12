@@ -51,7 +51,6 @@ spec:
       action: roadiehq:utils:sleep
       input:
         amount: 90
-        unit: seconds
 
     - id: register
       name: Register in Catalog
