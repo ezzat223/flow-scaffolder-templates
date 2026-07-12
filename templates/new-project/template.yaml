@@ -50,7 +50,7 @@ spec:
       name: Wait for Action to Finish
       action: roadiehq:utils:sleep
       input:
-        amount: 90
+        amount: 60
 
     - id: register
       name: Register in Catalog
