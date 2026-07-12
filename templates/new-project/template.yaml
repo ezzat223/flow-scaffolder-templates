@@ -1,0 +1,62 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: new-finaira-project
+  title: New Finaira Project (AI / Software)
+  description: >
+    Provisions a new project repo under the Finaira1 org using the
+    platform-template-generator Action, then registers it in Backstage.
+  tags:
+    - flow-pillar
+    - provisioning
+spec:
+  owner: group:flow-pillar
+  type: service
+
+  parameters:
+    - title: Project Details
+      required:
+        - project_name
+        - project_type
+      properties:
+        project_name:
+          title: Project Name
+          type: string
+          description: Repo name (letters, numbers, dashes, underscores, dots only)
+          pattern: '^[A-Za-z0-9_.-]+$'
+        project_type:
+          title: Project Type
+          type: string
+          description: Type of project scaffold to generate
+          enum:
+            - "AI - Software"
+            - "Software only"
+            - "POC"
+          default: "AI - Software"
+
+  steps:
+    - id: dispatch
+      name: Trigger Repo Generator Action
+      action: github:actions:dispatch
+      input:
+        repoUrl: github.com?repo=platform-template-generator&owner=Finaira1
+        workflowId: generate_repo.yaml
+        branchOrTagName: main
+        workflowInputs:
+          project_name: ${{ parameters.project_name }}
+          project_type: ${{ parameters.project_type }}
+
+    - id: register
+      name: Register in Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/main
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: View New Repo
+        url: https://github.com/Finaira1/${{ parameters.project_name }}
+      - title: Open in Catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
