@@ -69,13 +69,13 @@ spec:
         branchName: add-catalog-info
         title: "chore: add catalog-info.yaml"
         description: "Adds standardized Backstage registration file"
-        sourcePath: fetch-skeleton   # references the rendered output from the fetch-skeleton step
+        sourcePath: fetch-skeleton
 
     - id: register
       name: Register in Catalog
       action: catalog:register
       input:
-        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/main
+        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/add-catalog-info
         catalogInfoPath: /catalog-info.yaml
 
 #    - id: register
