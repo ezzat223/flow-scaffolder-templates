@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.project_name }}
+  description: ${{ values.project_type }} project generated via Flow pillar scaffolding
+  annotations:
+    github.com/project-slug: Finaira1/${{ values.project_name }}
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - flow-pillar
+    - ${{ values.project_type | lower | replace(" ", "-") }}
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:flow-pillar
+  system: mlops-platform

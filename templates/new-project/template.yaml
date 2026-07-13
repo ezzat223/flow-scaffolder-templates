@@ -34,7 +34,16 @@ spec:
             - "POC"
           default: "AI - Software"
 
-  steps:
+steps:
+    - id: fetch-skeleton
+      name: Render catalog-info.yaml
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          project_name: ${{ parameters.project_name }}
+          project_type: ${{ parameters.project_type }}
+
     - id: dispatch
       name: Trigger Repo Generator Action
       action: github:actions:dispatch
@@ -51,6 +60,23 @@ spec:
       action: roadiehq:utils:sleep
       input:
         amount: 60
+
+    - id: push-catalog-info
+      name: Push catalog-info.yaml to generated repo
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=${{ parameters.project_name }}&owner=Finaira1
+        branchName: add-catalog-info
+        title: "chore: add catalog-info.yaml"
+        description: "Adds standardized Backstage registration file"
+        sourcePath: fetch-skeleton   # references the rendered output from the fetch-skeleton step
+
+    - id: register
+      name: Register in Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: https://github.com/Finaira1/${{ parameters.project_name }}/blob/main
+        catalogInfoPath: /catalog-info.yaml
 
 #    - id: register
 #      name: Register in Catalog
