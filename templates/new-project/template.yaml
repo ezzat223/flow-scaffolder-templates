@@ -34,7 +34,7 @@ spec:
             - "POC"
           default: "AI - Software"
 
-steps:
+  steps:
     - id: fetch-skeleton
       name: Render catalog-info.yaml
       action: fetch:template
